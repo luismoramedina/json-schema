@@ -43,7 +43,7 @@ public class IssueTest {
     @Parameters(name = "{1}")
     public static List<Object[]> params() {
         List<Object[]> rval = new ArrayList<>();
-        Reflections refs = new Reflections("org.everit.json.schema.issues",
+        Reflections refs = new Reflections("org.everit.json.schema.issues.issue308",
                 new ResourcesScanner());
         Set<String> paths = refs.getResources(Pattern.compile("schema.json"))
                 .stream().map(path -> path.substring(0, path.lastIndexOf('/')))
@@ -139,6 +139,11 @@ public class IssueTest {
         configKeyHandlers.put("schemaClient", value -> {
             if ("classPathAware".equals(value)) {
                 loaderBuilder.schemaClient(SchemaClient.classPathAwareClient());
+            }
+        });
+        configKeyHandlers.put("keepCustomFormatValidators", value -> {
+            if ((Boolean) value) {
+                loaderBuilder.keepCustomFormatValidators();
             }
         });
         fileByName("validator-config.json").map(file -> streamAsJson(file)).ifPresent(configJson -> {
